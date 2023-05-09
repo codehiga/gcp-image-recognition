@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { json, urlencoded } from "express";
 import multer from "multer";
+import { analyzeImage } from "./services/analyze-image";
 import { uploadImage } from "./services/upload-image";
 
 dotenv.config();
@@ -26,6 +27,23 @@ app.use("/api/image/upload", upload.single("image"), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erro ao armazenar imagem..." });
+  }
+});
+
+app.use("/api/image/analyze", async (req, res) => {
+  try {
+    const uri = req.body.uri;
+    if (uri) {
+      const labels = await analyzeImage(uri);
+      res.status(200).json({ labels });
+    } else {
+      res.status(500).json({
+        message: "Obrigatório enviar uma URI...",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao armazenar analisar imagem..." });
   }
 });
 
