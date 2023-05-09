@@ -1,5 +1,5 @@
 import { File, Storage } from "@google-cloud/storage";
-import { randomUUID } from "crypto";
+import cuid from "cuid";
 import { Readable } from "stream";
 import { config } from "../config/env";
 import { IUploadImage } from "../types/upload-image-type";
@@ -7,7 +7,7 @@ import { IUploadImage } from "../types/upload-image-type";
 async function uploadImage(file: Express.Multer.File): Promise<IUploadImage> {
   const storage = new Storage();
   const bucketName = config.GCS_BUCKET_NAME;
-  const imageFilename = `${randomUUID()}_${file.originalname}`;
+  const imageFilename = `${cuid()}_${file.originalname}`;
   const bucket = storage.bucket(bucketName);
   const imageFile = bucket.file(imageFilename);
   const bufferStream = new Readable();
