@@ -53,7 +53,43 @@ A API estará disponível em http://localhost:3000.
 ## Endpoints
 
 POST /api/image/upload
-Recebe uma imagem no formato multipart/form-data e retorna o URL da imagem armazenada no Google Cloud Storage e uma lista de rótulos associados à imagem.
+Recebe uma imagem no formato multipart/form-data e retorna o URL e URI da imagem armazenada no Google Cloud Storage.
+
+```
+// Response:
+{
+    "imageUploaded": {
+        "uri": "gs://bucket-name/file-name",
+        "url": "https://storage.googleapis.com/bucket-name/file-name"
+    }
+}
+```
+
+POST /api/image/analyze
+Recebe no body a uri (exemplo abaixo) e retorna uma lista com a descrição da analise efetuada e a chance de acerto;
+
+```
+// Request:
+{
+    "uri": "gs://bucket-name/file-name"
+}
+```
+
+```
+// Response:
+{
+    "labels": [
+        {
+            "score": 0.942572295665741,
+            "description": "Photograph"
+        },
+        {
+            "score": 0.9226526618003845,
+            "description": "Ecoregion"
+        }
+    ]
+}
+```
 
 Licença
 Este projeto está licenciado sob a Licença MIT. Consulte o arquivo LICENSE para obter detalhes.
